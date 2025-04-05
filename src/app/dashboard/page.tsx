@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import { useRouter } from 'next/navigation';
 
 
 interface User {
@@ -17,10 +19,11 @@ export default function DashboardPage() {
   const { data: session } = useSession();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (!session) {
-      window.location.href = '/login';
+      router.push("/login");
     }
 
     const fetchUsers = async () => {
@@ -36,11 +39,12 @@ export default function DashboardPage() {
     };
 
     fetchUsers();
-  }, [session]);
+  }, [session, router]);
 
   if (loading) return <div>Loading...</div>;
 
   return (
+    <ProtectedRoute>
     <div className="flex-1 ml-64 p-8">
     <h1 className="text-2xl font-semibold text-white mb-4">Lista de Funcionários</h1>
     <table className="min-w-full bg-gray-800 text-white rounded-md">
@@ -72,5 +76,6 @@ export default function DashboardPage() {
       </tbody>
     </table>
   </div>
+  </ProtectedRoute>
   );
 }

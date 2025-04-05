@@ -1,19 +1,22 @@
-import { getServerSession } from "next-auth"
-import { redirect } from 'next/navigation'
-import { authOptions } from '@/lib/auth'
+"use client";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions)
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-  if (!session || session.user.role !== 'ADMIN') {
-    redirect('/dashboard')
-  }
+export default function HomePage() {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push("/dashboard");
+    } else {
+      router.push("/login");
+    }
+  }, [session, router]);
 
   return (
-    <>
-    <h1 className="h-screen flex items-center justify-center">
-        Home Page
-    </h1>
-    </>
+    <></>
   );
 }
