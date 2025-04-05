@@ -6,19 +6,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";  
 import {
-    ArrowTrendingDownIcon,
     Cog6ToothIcon,
     UserCircleIcon,
     CalendarDaysIcon,
     IdentificationIcon,
     ListBulletIcon,
+    ArrowRightEndOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
 const navItems = [
     { label: 'Lista de Funcionários', href: '/dashboard', icon: ListBulletIcon },
     { label: 'Marcar Férias', href: '/book-holidays', icon: CalendarDaysIcon },
-    { label: 'Definições do Perfil', href: '/transactions', icon: Cog6ToothIcon },
-    { label: 'Gestão de Utilizadores', href: '/user-management', icon: IdentificationIcon, role: 'ADMIN' }, 
+    { label: 'Definições do Perfil', href: '/profile-settings', icon: Cog6ToothIcon },
+    { label: 'Gestão de Utilizadores', href: '/user-management', icon: IdentificationIcon, role: 'ADMIN' },
+    { label: 'Novo Utilizador', href: '/new-user', icon: IdentificationIcon, role: 'ADMIN' }, 
     { label: 'Ver Férias', href: '/manage-holidays', icon: CalendarDaysIcon, role: 'ADMIN' }, 
 ];
 
@@ -75,7 +76,7 @@ export default function Sidebar() {
                 <button
                     className="flex items-center gap-2 w-full px-4 py-2 rounded-md bg-gray-800 text-gray-200 hover:bg-gray-700 text-sm"
                     onClick={() => signOut()}>
-                    <ArrowTrendingDownIcon className="h-5 w-5" />
+                    <ArrowRightEndOnRectangleIcon className="h-5 w-5" />
                     Logout
                 </button>
 
