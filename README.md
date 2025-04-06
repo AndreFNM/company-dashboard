@@ -40,22 +40,29 @@ cd ..
 
 ### 2. Create the environment variable file in the root directory called .env
 ```bash
-MYSQL_ROOT_PASSWORD=your MySQL root password
+MYSQL_ROOT_PASSWORD=admin123
 MYSQL_DATABASE=companyDashboard_db
 MYSQL_PORT=3308
 
 NEXTAUTH_SECRET=HVJgxI1pocV3guNplN4iFFiPqYXf6eT7SvuP16Jeunk
 
-DATABASE_URL="mysql://root:your MySQL root password@127.0.0.1:3308/companyDashboard_db"
+DATABASE_URL="mysql://root:admin123@127.0.0.1:3308/companyDashboard_db"
 NEXT_PUBLIC_IMAGE_SERVER_URL=http://localhost:5001
 ```
-Important: Make sure the following ports are available on your machine:
-
-    3308 → MySQL database container
-
-    5001 → Image upload server
-
-If either is in use, you can change the ports in .env, docker-compose.yml, in app.ts inside the profile_images_server, and next.config.ts for the image upload server and restart the containers.
+>  **Important:** Make sure the following ports are available:
+> - `3308` → MySQL container
+> - `5001` → Image upload server
+>
+> If you change either port (e.g. to `3309` or `5002`), you must:
+> - Update `.env`
+> - Update `docker-compose.yml`
+> - If changing image upload port: also update `profile_images_server/app.ts`, `Dockerfile` (Here both 5001 must be changed to the new port), and `next.config.ts`
+> - Then run:
+>
+> ```bash
+> docker-compose down -v
+> docker-compose up --build
+> ```
 
 
 ### 3. Start Docker containers
@@ -81,7 +88,7 @@ These are created automatically when you run the database seed step:
 npx prisma migrate dev --name init
 npx prisma db seed
 ```
-### 4. Start the web application
+### 5. Start the web application
 ```bash
 npm run dev
 ```
