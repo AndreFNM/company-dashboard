@@ -10,6 +10,8 @@ export default function EditProfileForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [image, setImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState("");
 
   useEffect(() => {
     async function fetchUserData() {
@@ -24,8 +26,9 @@ export default function EditProfileForm() {
         const data = await res.json();
         setName(data.name || "");
         setPhone(data.phone || "");
+        setImageUrl(data.imageUrl || "");
       } catch (error) {
-        console.error("Error searching for users:", error);
+        console.error("Erro de rede:", error);
         setMessage("Erro de rede.");
       } finally {
         setLoading(false);
@@ -43,6 +46,34 @@ export default function EditProfileForm() {
       return;
     }
 
+    let uploadedImageUrl = imageUrl;
+
+    if (image) {
+      const formData = new FormData();
+      formData.append("file", image);
+
+      try {
+        const uploadRes = await fetch(`${process.env.NEXT_PUBLIC_IMAGE_SERVER_URL}/upload`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const uploadData = await uploadRes.json();
+
+        if (!uploadRes.ok) {
+          setMessage("Erro ao fazer upload da imagem.");
+          return;
+        }
+
+        uploadedImageUrl = uploadData.filepath;
+        setImageUrl(uploadData.filepath);
+      } catch (error) {
+        console.error("Erro ao fazer upload da imagem: ", error);
+        setMessage("Erro ao fazer upload da imagem.");
+        return;
+      }
+    }
+
     const res = await fetch("/api/edit-users", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -51,6 +82,7 @@ export default function EditProfileForm() {
         phone,
         currentPassword,
         newPassword: newPassword || undefined,
+        imageUrl: uploadedImageUrl,
       }),
     });
 
@@ -77,6 +109,16 @@ export default function EditProfileForm() {
         <p className="text-sm text-center text-green-500">{message}</p>
       )}
 
+      {imageUrl && (
+        <div className="flex justify-center mb-4">
+          <img
+            src={imageUrl}
+            alt="Foto de perfil"
+            className="w-32 h-32 object-cover rounded-full"
+          />
+        </div>
+      )}
+
       <div>
         <label className="block mb-1">Nome</label>
         <input
@@ -93,6 +135,16 @@ export default function EditProfileForm() {
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+        />
+      </div>
+
+      <div className="pt-4 border-t border-gray-600">
+        <label className="block mb-1">Atualizar imagem de perfil</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files?.[0] || null)}
+          className="block mb-4"
         />
       </div>
 

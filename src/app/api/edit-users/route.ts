@@ -16,6 +16,7 @@ export async function GET() {
     select: {
       name: true,
       phone: true,
+      imageUrl: true,
     },
   });
 
@@ -26,6 +27,13 @@ export async function GET() {
   return NextResponse.json(user);
 }
 
+type UpdateData = Partial<{
+  name: string;
+  phone: string;
+  imageUrl: string;
+  password: string;
+}>;
+
 export async function PATCH(req: Request) {
   const session = await getServerSession(authOptions);
 
@@ -34,19 +42,25 @@ export async function PATCH(req: Request) {
   }
 
   const body = await req.json();
-  const { name, phone, currentPassword, newPassword } = body;
+  const { name, phone, currentPassword, newPassword, imageUrl } = body;
 
   if (!name) {
     return NextResponse.json({ message: "Nome é obrigatório." }, { status: 400 });
   }
 
   const userId = parseInt(session.user.id);
-
   const user = await prisma.user.findUnique({ where: { id: userId } });
 
   if (!user) {
     return NextResponse.json({ message: "Utilizador não encontrado." }, { status: 404 });
   }
+
+  const updateData: UpdateData = {
+    name,
+  };
+
+  if (phone) updateData.phone = phone;
+  if (imageUrl) updateData.imageUrl = imageUrl;
 
   if (newPassword) {
     if (!currentPassword) {
@@ -59,17 +73,13 @@ export async function PATCH(req: Request) {
     }
 
     const hashed = await bcrypt.hash(newPassword, 10);
-
-    await prisma.user.update({
-      where: { id: userId },
-      data: { name, phone, password: hashed },
-    });
-  } else {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { name, phone },
-    });
+    updateData.password = hashed;
   }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: updateData,
+  });
 
   return NextResponse.json({ message: "Perfil atualizado com sucesso." });
 }

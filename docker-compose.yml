@@ -11,5 +11,15 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
 
+  image-server:
+    build:
+      context: ./profile_images_server
+    container_name: profile-image-server
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./profile_images_server/images:/app/images
+    restart: always
+
 volumes:
   mysql-data:
