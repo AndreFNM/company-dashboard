@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Company Dashboard 
 
-## Getting Started
+A full-stack web application that allows a company to manage its employees and their vacations. Includes authentication, admin dashboard, user profile management with image upload, and database-backed persistence.
 
-First, run the development server:
+---
+
+## Technologies Used
+
+- **Frontend and Backend:** Next.js, React, TypeScript
+- **Authentication:** NextAuth
+- **Database:** MySQL 8 + Prisma ORM
+- **Styling:** TailwindCSS
+- **Image upload server:** Express, Multer
+- **Dev environment:** Docker
+
+---
+
+## Requirements
+
+Make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/) (version 18 or higher)
+- [Docker](https://www.docker.com/)
+- [Git](https://git-scm.com/)
+
+---
+
+## Setup & Usage Instructions
+
+### 1. Clone the repository and install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/company-dashboard.git
+cd company-dashboard
+npm install
+cd profile_images_server
+npm install
+cd ..
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Create the environment variable file in the root directory called .env
+```bash
+MYSQL_ROOT_PASSWORD=your MySQL root password
+MYSQL_DATABASE=companyDashboard_db
+MYSQL_PORT=3308
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+NEXTAUTH_SECRET=HVJgxI1pocV3guNplN4iFFiPqYXf6eT7SvuP16Jeunk
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+DATABASE_URL="mysql://root:your MySQL root password@127.0.0.1:3308/companyDashboard_db"
+NEXT_PUBLIC_IMAGE_SERVER_URL=http://localhost:5001
+```
+Important: Make sure the following ports are available on your machine:
 
-## Learn More
+    3308 → MySQL database container
 
-To learn more about Next.js, take a look at the following resources:
+    5001 → Image upload server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If either is in use, you can change the ports in .env, docker-compose.yml, in app.ts inside the profile_images_server, and next.config.ts for the image upload server and restart the containers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+### 3. Start Docker containers
+```bash
+docker-compose up --build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Demo Users (created by `seed.ts`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The application seeds the database with the following test accounts:
+
+| Email                  | Password   | Role  |
+|------------------------|------------|-------|
+| `admin@empresa.com`    | `admin123` | ADMIN |
+| `user1@empresa.com`    | `user123`  | USER  |
+| `user2@empresa.com`    | `user123`  | USER  |
+| `user3@empresa.com`    | `user123`  | USER  |
+
+These are created automatically when you run the database seed step:
+
+### 4. Initialize and seed the database
+```bash
+npx prisma migrate dev --name init
+npx prisma db seed
+```
+### 4. Start the web application
+```bash
+npm run dev
+```
+
