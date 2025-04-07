@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function EditProfileForm() {
   const [name, setName] = useState("");
@@ -99,23 +100,35 @@ export default function EditProfileForm() {
     setConfirmPassword("");
   };
 
+  const clearMessage = () => {
+    if (message) setMessage("");
+  };
+
   if (loading) {
     return <p className="text-green-500">A carregar os dados...</p>;
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-xl mx-auto mt-8">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-5 max-w-xl mx-auto mt-8"
+      onClick={clearMessage}
+      onKeyDown={clearMessage}
+    >
       {message && (
         <p className="text-sm text-center text-green-500">{message}</p>
       )}
 
       {imageUrl && (
         <div className="flex justify-center mb-4">
-          <img
-            src={imageUrl}
-            alt="Foto de perfil"
-            className="w-32 h-32 object-cover rounded-full"
-          />
+          <div className="relative w-32 h-32 rounded-full overflow-hidden">
+            <Image
+              src={imageUrl}
+              alt="Foto de perfil"
+              fill
+              className="object-cover rounded-full"
+            />
+          </div>
         </div>
       )}
 
@@ -124,7 +137,10 @@ export default function EditProfileForm() {
         <input
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            clearMessage();
+          }}
           required
         />
       </div>
@@ -134,18 +150,36 @@ export default function EditProfileForm() {
         <input
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            clearMessage();
+          }}
         />
       </div>
 
       <div className="pt-4 border-t border-gray-600">
         <label className="block mb-1">Atualizar imagem de perfil</label>
+        <div className="mb-4">
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
-          className="block mb-4"
+          id="fileInput"
+          onChange={(e) => {
+            setImage(e.target.files?.[0] || null);
+            clearMessage();
+          }}
+          className="hidden"
         />
+        <label
+          htmlFor="fileInput"
+          className="inline-block px-4 py-2 bg-gray-700 text-white text-sm rounded cursor-pointer hover:bg-gray-600 transition duration-200"
+        >
+           Escolher nova foto
+        </label>
+        {image && (
+          <p className="text-sm text-gray-400 mt-1">Imagem selecionada: {image.name}</p>
+        )}
+      </div>
       </div>
 
       <div className="pt-4 border-t border-gray-600">
@@ -154,7 +188,10 @@ export default function EditProfileForm() {
           type="password"
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
+          onChange={(e) => {
+            setCurrentPassword(e.target.value);
+            clearMessage();
+          }}
         />
       </div>
 
@@ -164,7 +201,10 @@ export default function EditProfileForm() {
           type="password"
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          onChange={(e) => {
+            setNewPassword(e.target.value);
+            clearMessage();
+          }}
         />
       </div>
 
@@ -174,7 +214,10 @@ export default function EditProfileForm() {
           type="password"
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            clearMessage();
+          }}
         />
       </div>
 

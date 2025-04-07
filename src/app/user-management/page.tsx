@@ -44,11 +44,11 @@ export default function AdminUserTable() {
   };
 
   return (
-    <div className="space-y-6 p-16 sm:ml-64">
+    <div className="min-h-screen space-y-6 p-16 sm:ml-64 bg-gray-800">
       {message && <p className="text-green-500">{message}</p>}
 
       <table className="w-full text-sm text-left border border-gray-700">
-        <thead className="bg-gray-800 text-white">
+        <thead className="bg-gray-700 text-white">
           <tr>
             <th className="p-3">Nome</th>
             <th className="p-3">Email</th>
@@ -59,7 +59,7 @@ export default function AdminUserTable() {
         </thead>
         <tbody>
           {users.map((user) => (
-            <tr key={user.id} className="border-t border-gray-700">
+            <tr key={user.id} className="border-t border-gray-600 bg-gray-900">
               <td className="p-3">{user.name}</td>
               <td className="p-3">{user.email}</td>
               <td className="p-3">{user.position}</td>

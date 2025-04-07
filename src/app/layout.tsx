@@ -1,6 +1,6 @@
 "use client";
 
-//import type { Metadata } from "next";
+import { usePathname } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/sidebar";
@@ -16,26 +16,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// export const metadata: Metadata = {
-//   title: "Company Dashboard App",
-//   description: "Dashboar app",
-// };
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const authPages = ["/login"];
+  const isAuthPage = authPages.includes(pathname);
+
   return (
     <SessionProvider>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Sidebar />
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          {!isAuthPage && <Sidebar />}
+          {children}
+        </body>
+      </html>
     </SessionProvider>
   );
 }

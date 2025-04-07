@@ -93,7 +93,7 @@ export default function ManageHolidaysPage() {
 
   return (
     <ProtectedRoute requiredRole="ADMIN">
-    <div className="p-8 sm:ml-64 bg-gray-900 min-h-screen text-white">
+    <div className="p-8 sm:ml-64 bg-gray-800 min-h-screen text-white">
       <div className="w-full max-w-full mx-auto mb-8">
         <h1 className="text-3xl font-bold text-center mb-6">Painel de Férias de Todos os Funcionários</h1>
 
@@ -111,7 +111,7 @@ export default function ManageHolidaysPage() {
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.id} className="border-b border-gray-700">
+                <tr key={user.id} className="border-b border-gray-600 bg-gray-900">
                   <td className="px-4 py-2">{user.name}</td>
                   <td className="px-4 py-2">{user.position}</td>
                   <td className="px-4 py-2">{user.email}</td>

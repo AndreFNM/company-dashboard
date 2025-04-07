@@ -36,8 +36,17 @@ export default function CreateUserForm() {
     setPassword("");
   };
 
+  const clearMessage = () => {
+    if (message) setMessage("");
+  };
+
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-xl mx-auto mt-8">
+    <form 
+      onSubmit={handleSubmit} 
+      onClick={clearMessage}
+      onKeyDown={clearMessage}
+      className="space-y-6 max-w-xl mx-auto mt-8">
       {message && <p className="text-green-500 text-center">{message}</p>}
 
       <div>
@@ -45,7 +54,10 @@ export default function CreateUserForm() {
         <input
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) =>{ 
+            setName(e.target.value);
+            clearMessage();
+          }}
           required
         />
       </div>
@@ -56,7 +68,10 @@ export default function CreateUserForm() {
           type="email"
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            clearMessage();
+          }}
           required
         />
       </div>
@@ -66,7 +81,10 @@ export default function CreateUserForm() {
         <input
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={position}
-          onChange={(e) => setPosition(e.target.value)}
+          onChange={(e) => {
+            setPosition(e.target.value)
+            clearMessage();
+          }}
           required
         />
       </div>
@@ -76,7 +94,10 @@ export default function CreateUserForm() {
         <input
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            clearMessage();
+          }}
         />
       </div>
 
@@ -86,7 +107,10 @@ export default function CreateUserForm() {
           type="password"
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            clearMessage();
+          }}
           required
         />
       </div>
@@ -96,7 +120,10 @@ export default function CreateUserForm() {
         <select
           className="w-full p-2 bg-gray-800 border border-gray-600 rounded"
           value={role}
-          onChange={(e) => setRole(e.target.value as "USER" | "ADMIN")}
+          onChange={(e) => {
+            setRole(e.target.value as "USER" | "ADMIN");
+            clearMessage();
+          }}
         >
           <option value="USER">Utilizador</option>
           <option value="ADMIN">Administrador</option>
